@@ -204,16 +204,16 @@ export function Header({
 
         {/* Action Controls & Navigation */}
         <div className="header-actions-group">
-          {/* Recruiter Resilience Lab Button */}
+          {/* Recruiter Resilience Simulations Button */}
           <button
             id="simulation-toggle-btn"
             className={`action-chip lab-chip ${activeSimulation ? 'lab-chip-active' : ''}`}
             onClick={onOpenSimulationModal}
-            title="Recruiter Lab: Simulate malformed JSON, 429 rate limits, 10s timeouts & race conditions"
+            title="Simulate edge cases: Malformed JSON, 429 rate limits, 10s timeouts & race conditions"
           >
             <ShieldCheck size={14} />
             <span className="chip-label">
-              {activeSimulation ? `Test: ${activeSimulation}` : 'AI Resilience Lab'}
+              {activeSimulation ? `Sim: ${activeSimulation}` : 'Simulations'}
             </span>
             {activeSimulation && <span className="active-ping-dot" />}
           </button>
