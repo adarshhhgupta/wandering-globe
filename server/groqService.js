@@ -73,8 +73,9 @@ You MUST respond strictly with valid, pure JSON adhering to the exact same schem
  * Supported models list with fallback priority
  */
 const SUPPORTED_MODELS = [
-  'llama-3.3-70b-versatile',
-  'llama-3.1-8b-instant'
+  'openai/gpt-oss-120b',
+  'qwen/qwen3.8-27b',
+  'openai/gpt-oss-20b'
 ];
 
 function extractFailedGeneration(err) {
