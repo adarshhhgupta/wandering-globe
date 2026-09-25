@@ -1,5 +1,5 @@
 import React from 'react';
-import { DollarSign, PieChart, Tag, Sparkles, CheckCircle2 } from 'lucide-react';
+import { DollarSign, PieChart, Tag, Sparkles, CheckCircle2, ChevronDown } from 'lucide-react';
 import { CURRENCY_SYMBOLS } from '../utils/mockData.js';
 
 export function BudgetSummary({
@@ -55,18 +55,23 @@ export function BudgetSummary({
 
         {/* Currency Switcher */}
         <div className="currency-selector-row">
-          <span className="currency-label">Currency:</span>
-          <select
-            value={selectedCurrency}
-            onChange={(e) => onChangeCurrency(e.target.value)}
-            className="currency-dropdown"
-          >
-            {Object.keys(CURRENCY_SYMBOLS).map((c) => (
-              <option key={c} value={c}>
-                {c} ({CURRENCY_SYMBOLS[c]})
-              </option>
-            ))}
-          </select>
+          <label htmlFor="currency-select-dropdown" className="currency-label">Currency:</label>
+          <div className="currency-select-container">
+            <select
+              id="currency-select-dropdown"
+              value={selectedCurrency}
+              onChange={(e) => onChangeCurrency(e.target.value)}
+              className="currency-dropdown"
+              aria-label="Select Currency"
+            >
+              {Object.keys(CURRENCY_SYMBOLS).map((c) => (
+                <option key={c} value={c} className="currency-dropdown-option">
+                  {c} ({CURRENCY_SYMBOLS[c]})
+                </option>
+              ))}
+            </select>
+            <ChevronDown size={13} className="currency-select-chevron" aria-hidden="true" />
+          </div>
         </div>
       </div>
 

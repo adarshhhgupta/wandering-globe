@@ -45,7 +45,7 @@ export function TripView({
   const [packedItems, setPackedItems] = useState({});
   const [copyFeedback, setCopyFeedback] = useState(false);
 
-  const allDayNumbers = trip.days.map((d) => d.dayNumber);
+  const allDayNumbers = trip.days.map((d, idx) => Number(d.dayNumber) || Number(d.day) || (idx + 1));
 
   const togglePackItem = (idx) => {
     setPackedItems((prev) => ({ ...prev, [idx]: !prev[idx] }));
@@ -203,9 +203,9 @@ export function TripView({
           </div>
 
           <div className="days-stack">
-            {trip.days.map((day) => (
+            {trip.days.map((day, idx) => (
               <DaySection
-                key={day.dayNumber}
+                key={day.dayNumber || day.day || idx}
                 day={day}
                 allDayNumbers={allDayNumbers}
                 onReorderStops={onReorderStops}

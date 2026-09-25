@@ -86,25 +86,40 @@ export function validateTripResult(raw) {
 
   // Step 4: Validate each day and stop
   const validatedDays = parsed.days.map((dayItem, dayIdx) => {
-    const dayNumber = Number(dayItem.day) || dayIdx + 1;
+    const dayNumber = Number(dayItem.dayNumber) || Number(dayItem.day) || (dayIdx + 1);
     const theme = dayItem.theme || `Day ${dayNumber} Exploration`;
+    const dateOrDay = dayItem.dateOrDay || `Day ${dayNumber}`;
     const estimatedDailyCost = dayItem.estimatedDailyCost || '$100';
 
     const stops = Array.isArray(dayItem.stops)
-      ? dayItem.stops.map((stopItem, stopIdx) => ({
-          id: stopItem.id || `stop-${dayNumber}-${stopIdx + 1}`,
-          time: stopItem.time || '10:00 AM',
-          duration: stopItem.duration || '90m',
-          activity: stopItem.activity || 'Local Landmark Visit',
-          location: stopItem.location || parsed.destination,
-          description: stopItem.description || 'Explore the surrounding historic and scenic spots.',
-          cost: stopItem.cost || 'Free',
-          category: stopItem.category || 'Sightseeing'
-        }))
+      ? dayItem.stops.map((stopItem, stopIdx) => {
+          const title = String(stopItem.title || stopItem.activity || `Stop ${stopIdx + 1}`);
+          const durationMinutes = Number(stopItem.durationMinutes) || (parseInt(String(stopItem.duration)) || 60);
+          const costEstimate = typeof stopItem.costEstimate === 'number'
+            ? stopItem.costEstimate
+            : (parseInt(String(stopItem.cost).replace(/[^0-9]/g, '')) || 0);
+
+          return {
+            id: String(stopItem.id || `stop-${dayNumber}-${stopIdx + 1}`),
+            title,
+            activity: title,
+            time: String(stopItem.time || '10:00 AM'),
+            duration: String(stopItem.duration || `${durationMinutes}m`),
+            durationMinutes,
+            location: String(stopItem.location || parsed.destination),
+            description: String(stopItem.description || 'Explore and experience this curated destination.'),
+            cost: stopItem.cost !== undefined ? String(stopItem.cost) : (costEstimate > 0 ? `$${costEstimate}` : 'Free'),
+            costEstimate,
+            category: stopItem.category || 'Sightseeing',
+            tips: String(stopItem.tips || 'Wear comfortable shoes and check opening times.')
+          };
+        })
       : [];
 
     return {
       day: dayNumber,
+      dayNumber: dayNumber,
+      dateOrDay,
       theme,
       estimatedDailyCost,
       stops
@@ -112,22 +127,49 @@ export function validateTripResult(raw) {
   });
 
   // Step 5: Normalize budget telemetry
+  const rawTotalBudget = parsed.estimatedTotalBudget || {};
   const rawBudget = parsed.estimatedBudget || {};
+
+  const activitiesCost = Number(rawTotalBudget.breakdown?.activities) || Number(rawBudget.activities) || 200;
+  const foodCost = Number(rawTotalBudget.breakdown?.food) || Number(rawBudget.foodAndDining) || 350;
+  const stayCost = Number(rawTotalBudget.breakdown?.stay) || Number(rawBudget.accommodation) || 500;
+  const transportCost = Number(rawTotalBudget.breakdown?.transport) || Number(rawBudget.localTransport) || 150;
+  const currency = rawTotalBudget.currency || rawBudget.currency || 'USD';
+  const totalAmount = Number(rawTotalBudget.amount) || Number(rawBudget.totalEstimatedUsd) || (activitiesCost + foodCost + stayCost + transportCost);
+
+  const estimatedTotalBudget = {
+    currency,
+    amount: totalAmount,
+    breakdown: {
+      activities: activitiesCost,
+      food: foodCost,
+      stay: stayCost,
+      transport: transportCost
+    }
+  };
+
   const estimatedBudget = {
-    totalEstimatedUsd: Number(rawBudget.totalEstimatedUsd) || 1200,
-    accommodation: Number(rawBudget.accommodation) || 500,
-    foodAndDining: Number(rawBudget.foodAndDining) || 350,
-    activities: Number(rawBudget.activities) || 200,
-    localTransport: Number(rawBudget.localTransport) || 150,
-    currency: rawBudget.currency || 'USD'
+    totalEstimatedUsd: totalAmount,
+    accommodation: stayCost,
+    foodAndDining: foodCost,
+    activities: activitiesCost,
+    localTransport: transportCost,
+    currency
   };
 
   // Step 6: Return normalized, safe object
   const sanitizedTrip = {
     ...parsed,
+    durationDays: Number(parsed.durationDays) || validatedDays.length,
     days: validatedDays,
+    estimatedTotalBudget,
     estimatedBudget,
-    packingChecklist: Array.isArray(parsed.packingChecklist) ? parsed.packingChecklist : [],
+    packingHighlights: Array.isArray(parsed.packingHighlights)
+      ? parsed.packingHighlights
+      : (Array.isArray(parsed.packingChecklist) ? parsed.packingChecklist : []),
+    packingChecklist: Array.isArray(parsed.packingChecklist)
+      ? parsed.packingChecklist
+      : (Array.isArray(parsed.packingHighlights) ? parsed.packingHighlights : []),
     localTips: Array.isArray(parsed.localTips) ? parsed.localTips : []
   };
 

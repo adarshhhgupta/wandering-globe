@@ -89,7 +89,7 @@ export function validateTripResult(raw: unknown): { isValid: boolean; data?: Tri
 
   // Step 4: Validate each day and stop
   const validatedDays: DayPlan[] = parsed.days.map((dayItem: any, dayIdx: number) => {
-    const dayNumber = Number(dayItem.day) || Number(dayItem.dayNumber) || dayIdx + 1;
+    const dayNumber = Number(dayItem.dayNumber) || Number(dayItem.day) || dayIdx + 1;
     const theme = dayItem.theme || `Day ${dayNumber} Exploration`;
     const stopsList = Array.isArray(dayItem.stops) ? dayItem.stops : [];
 
@@ -123,9 +123,15 @@ export function validateTripResult(raw: unknown): { isValid: boolean; data?: Tri
     tripTitle: parsed.tripTitle.trim(),
     destination: parsed.destination.trim(),
     duration: parsed.duration || `${validatedDays.length} days`,
+    durationDays: Number(parsed.durationDays) || validatedDays.length,
     travelStyle: parsed.travelStyle || parsed.tripStyle || 'Balanced Explorer',
     summary: parsed.summary || `A curated ${validatedDays.length}-day journey through ${parsed.destination}.`,
     days: validatedDays,
+    estimatedTotalBudget: parsed.estimatedTotalBudget || {
+      currency: 'USD',
+      amount: 1200,
+      breakdown: { activities: 250, food: 350, stay: 500, transport: 100 }
+    },
     estimatedBudget: parsed.estimatedBudget || parsed.estimatedTotalBudget || {
       totalEstimatedUsd: 1200,
       accommodation: 500,

@@ -13,6 +13,7 @@ export function DaySection({
   onEditStop,
   currency = 'USD'
 }) {
+  const dayNumber = Number(day.dayNumber) || Number(day.day) || 1;
   const [isAdding, setIsAdding] = useState(false);
   const [dragOverIndex, setDragOverIndex] = useState(null);
 
@@ -36,7 +37,7 @@ export function DaySection({
     e.preventDefault();
     if (!newTitle.trim()) return;
 
-    onAddStop(day.dayNumber, {
+    onAddStop(dayNumber, {
       title: newTitle.trim(),
       time: newTime,
       durationMinutes: Number(newDuration) || 60,
@@ -74,12 +75,12 @@ export function DaySection({
       const data = JSON.parse(e.dataTransfer.getData('text/plain'));
       const { dayNumber: sourceDay, index: sourceIndex, stopId } = data;
 
-      if (sourceDay === day.dayNumber) {
+      if (sourceDay === dayNumber) {
         // Reorder within same day
-        onReorderStops(day.dayNumber, sourceIndex, targetIndex);
+        onReorderStops(dayNumber, sourceIndex, targetIndex);
       } else {
         // Transfer from another day
-        onMoveStopToDay(stopId, sourceDay, day.dayNumber, targetIndex);
+        onMoveStopToDay(stopId, sourceDay, dayNumber, targetIndex);
       }
     } catch (err) {
       console.error('Failed to parse drag drop event:', err);
@@ -87,12 +88,12 @@ export function DaySection({
   };
 
   return (
-    <section className="day-section" id={`day-section-${day.dayNumber}`}>
+    <section className="day-section" id={`day-section-${dayNumber}`}>
       {/* Day Header */}
       <div className="day-header">
         <div className="day-title-block">
           <div className="day-badge-col">
-            <span className="day-pill">Day {day.dayNumber}</span>
+            <span className="day-pill">Day {dayNumber}</span>
           </div>
           <div>
             <h2 className="day-theme">{day.theme}</h2>
@@ -127,7 +128,7 @@ export function DaySection({
           <form onSubmit={handleCreateStop}>
             <div className="add-form-header">
               <span className="form-title">
-                <Sparkles size={15} /> Add Custom Activity to Day {day.dayNumber}
+                <Sparkles size={15} /> Add Custom Activity to Day {dayNumber}
               </span>
               <button
                 type="button"
@@ -218,7 +219,7 @@ export function DaySection({
               </button>
               <button type="submit" className="btn btn-primary btn-sm">
                 <Plus size={15} />
-                <span>Add to Day {day.dayNumber}</span>
+                <span>Add to Day {dayNumber}</span>
               </button>
             </div>
           </form>
@@ -234,7 +235,7 @@ export function DaySection({
       >
         {day.stops.length === 0 ? (
           <div className="empty-day-state">
-            <p>No stops currently scheduled for Day {day.dayNumber}.</p>
+            <p>No stops currently scheduled for Day {dayNumber}.</p>
             <button
               type="button"
               className="btn btn-ghost btn-sm"
@@ -261,7 +262,7 @@ export function DaySection({
                 stop={stop}
                 index={sIndex}
                 totalStops={day.stops.length}
-                dayNumber={day.dayNumber}
+                dayNumber={dayNumber}
                 allDayNumbers={allDayNumbers}
                 onReorder={onReorderStops}
                 onMoveToDay={onMoveStopToDay}
