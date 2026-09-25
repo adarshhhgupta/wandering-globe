@@ -3573,8 +3573,6 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--glass-tier1-bg);
   transform: translateY(-1px);
 }
-  transform: translateY(-1px);
-}
 
 .animate-pulse-gentle {
   animation: pulseGentle 2s ease-in-out infinite alternate;
@@ -3902,6 +3900,113 @@ h1, h2, h3, h4, h5, h6 {
     padding: 6px 10px;
     font-size: 0.76rem;
   }
+}
+
+/* ==========================================================================
+   Loading State Card (Apple iOS Glass Telemetry Indicator)
+   ========================================================================== */
+.loading-state-card {
+  background: var(--bg-glass-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
+  padding: 44px 32px;
+  max-width: 680px;
+  margin: 30px auto;
+  text-align: center;
+  box-shadow: var(--shadow-glass), var(--specular-highlight);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.loading-spinner-wrapper {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-spinner-wrapper .spinner-icon {
+  color: var(--accent-primary);
+  animation: spin 1s linear infinite;
+  z-index: 2;
+}
+
+.loading-pulsing-rings {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--accent-subtle);
+  animation: pingDot 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.loading-text-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+
+.loading-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+}
+
+.loading-dots {
+  display: inline-block;
+  animation: pulseGentle 1.2s infinite;
+}
+
+.loading-prompt-preview {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  max-width: 520px;
+  line-height: 1.5;
+}
+
+.loading-telemetry-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.loading-step-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--glass-tier2-bg);
+  border: 1px solid var(--border-glass);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.loading-sim-notice {
+  font-size: 0.76rem;
+  color: var(--ios-orange);
+  background: var(--color-warning-bg);
+  border: 1px solid var(--color-warning-border);
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+}
+
+.loading-cancel-wrapper {
+  margin-top: 10px;
 }
 
 /* Print Styles */

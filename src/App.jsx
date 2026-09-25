@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Header } from './components/Header.jsx';
-import { TripInput } from './components/TripInput.jsx';
-import { TripView } from './components/TripView.jsx';
-import { ErrorBanner } from './components/ErrorBanner.jsx';
+import { PromptInput } from './components/PromptInput.jsx';
+import { ResultView } from './components/ResultView.jsx';
+import { ErrorState } from './components/ErrorState.jsx';
+import { LoadingState } from './components/LoadingState.jsx';
 import { SimulationModal } from './components/SimulationModal.jsx';
 import { SavedTripsDrawer } from './components/SavedTripsDrawer.jsx';
 import { ApiKeyModal } from './components/ApiKeyModal.jsx';
@@ -169,9 +170,9 @@ export function App() {
       />
 
       <main className="main-content">
-        {/* Error Banner with Diagnostics and Recovery */}
+        {/* Error State with Diagnostics and Recovery */}
         {error && (
-          <ErrorBanner
+          <ErrorState
             error={error}
             onRetry={() => handlePlanTrip(lastPrompt || 'Tokyo')}
             onLoadMockDemo={loadMockDemo}
@@ -179,9 +180,18 @@ export function App() {
           />
         )}
 
-        {/* Input Hero Card */}
-        {!trip && (
-          <TripInput
+        {/* Dedicated Loading State with Telemetry and Cancel Action */}
+        {status === 'loading' && (
+          <LoadingState
+            onCancel={cancelRequest}
+            promptText={lastPrompt}
+            activeSimulation={activeSimulation}
+          />
+        )}
+
+        {/* Free-form Prompt Input Card */}
+        {!trip && status !== 'loading' && (
+          <PromptInput
             onGenerate={handlePlanTrip}
             onCancel={cancelRequest}
             isLoading={status === 'loading'}
@@ -191,9 +201,9 @@ export function App() {
           />
         )}
 
-        {/* Generated Interactive Itinerary */}
+        {/* Generated Interactive Result View */}
         {trip && (
-          <TripView
+          <ResultView
             trip={trip}
             onRefine={handleRefineTrip}
             onCancelRefine={cancelRequest}

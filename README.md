@@ -98,12 +98,17 @@ Click the **AI Resilience Lab** pill in the top header to test edge-case handlin
 ```
 flamassignment/
 ├── server/
+│   ├── generate.js          # Direct Flam Guide spec: holds API key, calls LLM, returns JSON
 │   ├── index.js             # Express API proxy (secure key isolation, simulation routing)
 │   ├── groqService.js       # Groq API client with strict structured JSON schemas
 │   ├── validateSchema.js    # Data extraction, normalization, and validation rules
 │   └── mockTrips.js         # Curated realistic trip datasets for zero-config evaluation
 ├── src/
 │   ├── components/
+│   │   ├── PromptInput.jsx         # Section 5: Free-form text input ("only way user gets info into app")
+│   │   ├── ResultView.jsx          # Section 5: Routes parsed/validated data to interactive UI
+│   │   ├── ErrorState.jsx          # Section 5: Shared error / retry UI with diagnostics
+│   │   ├── LoadingState.jsx        # Section 5: Dedicated loading telemetry with AbortController cancel
 │   │   ├── Header.jsx              # Navigation, theme toggle, resilience lab & API modal triggers
 │   │   ├── HeroRadarCanvas.jsx     # High-performance 60 FPS celestial flight radar canvas
 │   │   ├── DestinationPortal.jsx   # 3D celestial portal window with planetary coordinates
@@ -122,10 +127,10 @@ flamassignment/
 │   │   ├── useTripPlanner.js       # Core state machine, AbortController, stale check, CRUD
 │   │   └── useLocalStorage.js      # Synced persistent storage for trips and theme
 │   ├── lib/
-│   │   ├── api.js                  # Centralized client-side API layer (backend proxy caller)
-│   │   └── validateResult.js       # Defensive shape validation & normalization before render
+│   │   ├── api.js                  # Section 5: Centralized network layer (proxy caller, never LLM direct)
+│   │   └── validateResult.js       # Section 5: Defensive shape validation & normalization before render
 │   ├── types/
-│   │   └── result.js               # Formal JSDoc schema contract designed in Step 1
+│   │   └── result.js               # Section 5: The structured shape designed in Step 1
 │   ├── utils/
 │   │   ├── jsonRepair.js           # Multi-heuristic client-side JSON parser & sanitizer
 │   │   └── mockData.js             # Preset inspiration prompts, category themes, currencies
