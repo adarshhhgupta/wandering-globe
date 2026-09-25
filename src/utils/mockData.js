@@ -76,6 +76,19 @@ export const CURRENCY_SYMBOLS = {
   JPY: '¥'
 };
 
+export const CURRENCY_RATES = {
+  USD: 1.0,
+  EUR: 0.92,
+  GBP: 0.79,
+  INR: 86.5,
+  JPY: 154.0
+};
+
+export function convertCurrency(baseAmountUsd, targetCurrency = 'USD') {
+  const rate = CURRENCY_RATES[targetCurrency] || 1.0;
+  return Math.round(Number(baseAmountUsd || 0) * rate);
+}
+
 export const REFINEMENT_PRESETS = [
   "💰 Make it more budget-friendly",
   "🍜 Swap dinners for authentic street food",

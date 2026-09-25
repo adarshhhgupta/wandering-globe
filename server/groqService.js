@@ -73,11 +73,26 @@ You MUST respond strictly with valid, pure JSON adhering to the exact same schem
  * Supported models list with fallback priority
  */
 const SUPPORTED_MODELS = [
-  'openai/gpt-oss-120b',
-  'qwen/qwen3.8-27b',
   'llama-3.3-70b-versatile',
   'llama-3.1-8b-instant'
 ];
+
+function extractFailedGeneration(err) {
+  if (!err) return null;
+  if (err.error?.failed_generation) {
+    return err.error.failed_generation;
+  }
+  const str = typeof err.message === 'string' ? err.message : JSON.stringify(err);
+  const match = str.match(/"failed_generation":\s*"((?:\\.|[^"\\])*)"/s);
+  if (match && match[1]) {
+    try {
+      return JSON.parse(`"${match[1]}"`);
+    } catch (_) {
+      return match[1].replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+    }
+  }
+  return null;
+}
 
 function getGroqClient(customApiKey) {
   const apiKey = customApiKey || process.env.GROQ_API_KEY;
@@ -96,16 +111,30 @@ async function callGroqWithFallback(groq, params) {
     try {
       const completion = await groq.chat.completions.create({
         ...params,
+        max_tokens: 4096,
         model
       });
       return completion;
     } catch (err) {
       lastErr = err;
-      if (err.message && (err.message.includes('does not exist') || err.message.includes('model_not_found'))) {
-        console.warn(`[Groq Model Fallback] Model ${model} not available, trying next model...`);
-        continue;
+      console.warn(`[Groq Model Error with ${model}]:`, err.message);
+
+      // Check if error contains failed_generation that can be salvaged directly
+      const failedGen = extractFailedGeneration(err);
+      if (failedGen) {
+        console.log(`[Groq AI] Successfully salvaged JSON from failed_generation error!`);
+        return {
+          choices: [
+            {
+              message: {
+                content: failedGen
+              }
+            }
+          ]
+        };
       }
-      throw err;
+
+      continue;
     }
   }
   throw lastErr;

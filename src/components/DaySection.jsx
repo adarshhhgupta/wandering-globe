@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Calendar, Clock, DollarSign, Sparkles, Check, X } from 'lucide-react';
 import { StopCard } from './StopCard.jsx';
-import { CATEGORY_COLORS, CURRENCY_SYMBOLS } from '../utils/mockData.js';
+import { CATEGORY_COLORS, CURRENCY_SYMBOLS, convertCurrency } from '../utils/mockData.js';
 
 export function DaySection({
   day,
@@ -105,7 +105,7 @@ export function DaySection({
                 <Clock size={13} /> ~{totalDayHours} hrs planned
               </span>
               <span className="meta-pill cost-meta">
-                <DollarSign size={13} /> {currencySymbol}{totalDayCost}
+                <DollarSign size={13} /> {currencySymbol}{convertCurrency(totalDayCost, currency).toLocaleString()}
               </span>
             </div>
           </div>

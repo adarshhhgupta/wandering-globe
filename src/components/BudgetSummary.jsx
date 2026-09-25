@@ -1,6 +1,6 @@
 import React from 'react';
-import { DollarSign, PieChart, Tag, Sparkles, CheckCircle2, ChevronDown } from 'lucide-react';
-import { CURRENCY_SYMBOLS } from '../utils/mockData.js';
+import { DollarSign, PieChart, Tag, Sparkles, CheckCircle2, ChevronDown, ArrowRightLeft } from 'lucide-react';
+import { CURRENCY_SYMBOLS, CURRENCY_RATES, convertCurrency } from '../utils/mockData.js';
 
 export function BudgetSummary({
   trip,
@@ -8,8 +8,9 @@ export function BudgetSummary({
   onChangeCurrency
 }) {
   const currencySymbol = CURRENCY_SYMBOLS[selectedCurrency] || '$';
+  const rate = CURRENCY_RATES[selectedCurrency] || 1.0;
 
-  // Compute live totals from all days & stops
+  // Compute live totals from all days & stops (base in USD)
   let liveStopsCost = 0;
   let freeStopsCount = 0;
   let categoryCounts = {};
@@ -32,17 +33,20 @@ export function BudgetSummary({
     transport: 100
   };
 
-  const totalCalculated =
+  const totalCalculatedUsd =
     liveStopsCost +
     (baseBreakdown.food || 0) +
     (baseBreakdown.stay || 0) +
     (baseBreakdown.transport || 0);
 
+  // Converted totals according to selectedCurrency exchange rate
+  const totalCalculated = Math.round(totalCalculatedUsd * rate);
+
   const breakdownItems = [
-    { label: 'Activities & Attractions', amount: liveStopsCost, color: '#3b82f6' },
-    { label: 'Food & Dining (Est.)', amount: baseBreakdown.food || 0, color: '#f97316' },
-    { label: 'Lodging & Stay (Est.)', amount: baseBreakdown.stay || 0, color: '#10b981' },
-    { label: 'Local Transport (Est.)', amount: baseBreakdown.transport || 0, color: '#a855f7' },
+    { label: 'Activities & Attractions', amount: Math.round(liveStopsCost * rate), color: '#3b82f6' },
+    { label: 'Food & Dining (Est.)', amount: Math.round((baseBreakdown.food || 0) * rate), color: '#f97316' },
+    { label: 'Lodging & Stay (Est.)', amount: Math.round((baseBreakdown.stay || 0) * rate), color: '#10b981' },
+    { label: 'Local Transport (Est.)', amount: Math.round((baseBreakdown.transport || 0) * rate), color: '#a855f7' },
   ];
 
   return (
@@ -85,6 +89,12 @@ export function BudgetSummary({
         <span className="budget-pacing-note">
           Based on {trip.durationDays} days in {trip.destination}
         </span>
+        {selectedCurrency !== 'USD' && (
+          <div className="currency-fx-tag">
+            <ArrowRightLeft size={11} />
+            <span>1 USD ≈ {currencySymbol}{rate.toLocaleString()} {selectedCurrency}</span>
+          </div>
+        )}
       </div>
 
       {/* Visual Breakdown Progress Bars */}

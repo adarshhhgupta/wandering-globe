@@ -15,7 +15,7 @@ import {
   ArrowDown,
   CornerDownRight
 } from 'lucide-react';
-import { CATEGORY_COLORS, CURRENCY_SYMBOLS } from '../utils/mockData.js';
+import { CATEGORY_COLORS, CURRENCY_SYMBOLS, convertCurrency } from '../utils/mockData.js';
 
 export function StopCard({
   stop,
@@ -241,7 +241,7 @@ export function StopCard({
 
             {stop.costEstimate > 0 ? (
               <span className="stop-cost-badge">
-                {currencySymbol}{stop.costEstimate}
+                {currencySymbol}{convertCurrency(stop.costEstimate, currency).toLocaleString()}
               </span>
             ) : (
               <span className="stop-cost-badge free-badge">Free</span>

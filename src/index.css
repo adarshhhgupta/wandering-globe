@@ -2792,6 +2792,28 @@ body.light-theme .currency-dropdown option,
   color: var(--text-muted);
 }
 
+.currency-fx-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #c7d2fe;
+  letter-spacing: 0.02em;
+}
+
+body.light-theme .currency-fx-tag,
+[data-theme='light'] .currency-fx-tag {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.25);
+  color: #4338ca;
+}
+
 .breakdown-bars-list {
   display: flex;
   flex-direction: column;
