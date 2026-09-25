@@ -3903,33 +3903,85 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ==========================================================================
-   Loading State Card (Apple iOS Glass Telemetry Indicator)
+   Main Content Layout & Loading State (Centered Viewport & Smooth Transitions)
    ========================================================================== */
+.main-content {
+  min-height: calc(100vh - 140px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+  z-index: 10;
+  padding-top: 10px;
+  padding-bottom: 50px;
+  transition: min-height 0.3s ease;
+}
+
+.loading-view-wrapper {
+  min-height: 72vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 40px 20px 80px 20px;
+  animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.96) translateY(16px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
 .loading-state-card {
+  position: relative;
   background: var(--bg-glass-card);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border-glass);
-  border-radius: var(--radius-xl);
-  padding: 44px 32px;
-  max-width: 680px;
-  margin: 30px auto;
+  border-radius: var(--radius-2xl, 28px);
+  padding: 50px 36px;
+  max-width: 660px;
+  width: 100%;
+  margin: 0 auto;
   text-align: center;
-  box-shadow: var(--shadow-glass), var(--specular-highlight);
+  box-shadow: var(--shadow-glass), 0 24px 64px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.35);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
-  animation: fadeIn 0.3s ease-out;
+  gap: 22px;
+  overflow: hidden;
+}
+
+.loading-ambient-glow {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.22) 0%, rgba(168, 85, 247, 0.1) 45%, transparent 70%);
+  filter: blur(45px);
+  pointer-events: none;
+  animation: pulseGentle 3s ease-in-out infinite alternate;
+  z-index: 0;
 }
 
 .loading-spinner-wrapper {
   position: relative;
-  width: 72px;
-  height: 72px;
+  width: 80px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
+}
+
+.spinner-center-compass {
+  position: absolute;
+  color: var(--accent-primary);
+  opacity: 0.85;
+  animation: spin 16s linear infinite reverse;
 }
 
 .loading-spinner-wrapper .spinner-icon {
@@ -3952,6 +4004,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   gap: 14px;
   width: 100%;
+  z-index: 1;
 }
 
 .loading-title {
@@ -3964,6 +4017,31 @@ h1, h2, h3, h4, h5, h6 {
 .loading-dots {
   display: inline-block;
   animation: pulseGentle 1.2s infinite;
+}
+
+.loading-progress-bar-container {
+  width: 100%;
+  max-width: 360px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(125, 125, 125, 0.18);
+  overflow: hidden;
+  position: relative;
+  margin: 4px 0 8px 0;
+}
+
+.loading-progress-bar-fill {
+  height: 100%;
+  width: 40%;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+  animation: indeterminateProgress 1.6s ease-in-out infinite;
+}
+
+@keyframes indeterminateProgress {
+  0% { transform: translateX(-120%); width: 30%; }
+  50% { width: 60%; }
+  100% { transform: translateX(360%); width: 30%; }
 }
 
 .loading-prompt-preview {

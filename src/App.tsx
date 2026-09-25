@@ -66,6 +66,13 @@ export function App() {
       });
   }, []);
 
+  // Auto-scroll to top smoothly whenever status changes to loading or a new trip arrives
+  useEffect(() => {
+    if (status === 'loading' || trip) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [status, trip]);
+
   // Handle plan trip with current simulation setting
   const handlePlanTrip = (promptText: string) => {
     planTrip(promptText, {
