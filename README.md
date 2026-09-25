@@ -4,7 +4,8 @@
 > An immersive, stateful 3D travel application transforming free-form text input into interactive day-by-day itineraries with live budget analytics, drag-and-drop reordering, and model failure resilience.
 
 🚀 **Live Production Deployment:** [https://wandering-globe.vercel.app](https://wandering-globe.vercel.app)  
-📦 **GitHub Repository:** [https://github.com/adarshhhgupta/wandering-globe](https://github.com/adarshhhgupta/wandering-globe)
+📦 **GitHub Repository:** [https://github.com/adarshhhgupta/wandering-globe](https://github.com/adarshhhgupta/wandering-globe)  
+🎥 **Screen Recording Demo:** [https://youtu.be/UBTp_u8TOp4](https://youtu.be/UBTp_u8TOp4)
 
 ---
 
@@ -14,8 +15,8 @@ The application runs a secure Node/Express backend proxy along with the Vite/Rea
 
 ```bash
 # 1. Clone the repository
-git clone <your-repo-url>
-cd flamassignment
+git clone https://github.com/adarshhhgupta/wandering-globe.git
+cd wandering-globe
 
 # 2. Install dependencies
 npm install
@@ -29,7 +30,7 @@ npm start
 - *Zero-Config Demo Mode:* If no API key is configured, the application **automatically runs in Built-in Demo Mock Mode**, allowing instant evaluation without requiring external API credits!
 
 ### Adding a Live Groq API Key (Optional)
-To use live LLM inference with Groq (`llama-3.3-70b-versatile`):
+To use live LLM inference with Groq (e.g. `openai/gpt-oss-120b` or `llama-3.3-70b-versatile`):
 1. Copy `.env.example` to `.env`:
    ```bash
    cp .env.example .env
