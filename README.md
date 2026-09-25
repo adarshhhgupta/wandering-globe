@@ -1,7 +1,10 @@
 # 🌍 Wandering Globe — 3D Interactive AI Trip Architect
 
-> **Frontend Internship Assignment Submission**  
+> **Frontend Internship Assignment Submission — Flam**  
 > An immersive, stateful 3D travel application transforming free-form text input into interactive day-by-day itineraries with live budget analytics, drag-and-drop reordering, and model failure resilience.
+
+🚀 **Live Production Deployment:** [https://wandering-globe.vercel.app](https://wandering-globe.vercel.app)  
+📦 **GitHub Repository:** [https://github.com/adarshhhgupta/wandering-globe](https://github.com/adarshhhgupta/wandering-globe)
 
 ---
 
