@@ -42,15 +42,15 @@ export function validateTripResult(raw: unknown): { isValid: boolean; data?: Tri
         code: 'EMPTY_RESPONSE'
       };
     }
-    const parseResult = resilientJSONParse(raw);
-    if (!parseResult.success) {
+    try {
+      parsed = resilientJSONParse(raw);
+    } catch (parseError: any) {
       return {
         isValid: false,
-        error: `Malformed JSON from model: ${parseResult.error}`,
+        error: `Malformed JSON from model: ${parseError.message}`,
         code: 'MALFORMED_JSON'
       };
     }
-    parsed = parseResult.data;
   }
 
   // Step 2: Validate root is an object
