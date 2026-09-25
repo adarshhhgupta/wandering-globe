@@ -221,9 +221,13 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`\n======================================================`);
-  console.log(`🚀 WanderForge AI Server listening on port http://localhost:${PORT}`);
-  console.log(`🔑 Groq API Key: ${process.env.GROQ_API_KEY ? 'Configured ✅' : 'Not set (Demo Mock Fallback Active) ⚠️'}`);
-  console.log(`======================================================\n`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`\n======================================================`);
+    console.log(`🚀 Wandering Globe AI Server listening on port http://localhost:${PORT}`);
+    console.log(`🔑 Groq API Key: ${process.env.GROQ_API_KEY ? 'Configured ✅' : 'Not set (Demo Mock Fallback Active) ⚠️'}`);
+    console.log(`======================================================\n`);
+  });
+}
+
+export default app;
