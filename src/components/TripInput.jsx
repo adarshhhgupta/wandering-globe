@@ -126,12 +126,6 @@ export function TripInput({
 
       {/* Central Editorial Hero Header */}
       <header className="hero-editorial-header">
-        <div className="hero-pill-badge">
-          <span className="pulsing-live-dot" />
-          <Sparkles size={13} className="sparkle-icon" />
-          <span> Apple Intelligence • Travel Studio OS 18</span>
-        </div>
-
         <h1 className="hero-monumental-title">
           Where will curiosity <span className="gradient-text-accent">lead you?</span>
         </h1>

@@ -82,7 +82,7 @@ export function Header({
           <div className="brand-text-block">
             <div className="brand-title-line">
               <span className="brand-main-title">Wandering Globe</span>
-              <span className="brand-version-pill">iOS 18</span>
+              <span className="brand-version-pill">AI Studio</span>
             </div>
             <p className="brand-descriptor">Autonomous Itinerary Architect & Travel Engine</p>
           </div>

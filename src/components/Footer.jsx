@@ -332,7 +332,7 @@ export function Footer({ onOpenSimulationModal, onOpenApiKeyModal, onOpenSavedTr
         {/* Spec & Specs Bottom Bar */}
         <div className="footer-bottom-bar">
           <p className="copyright-notice">
-            © 2026 Wandering Globe. Built with Apple iOS 18 Glass Aesthetics for the Flam Frontend Internship Assignment.
+            © 2026 Wandering Globe. Built for the Flam Frontend Internship Assignment.
           </p>
 
           <div className="specs-tag-cluster">
