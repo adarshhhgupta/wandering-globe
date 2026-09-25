@@ -145,11 +145,28 @@ flamassignment/
 
 ---
 
-## 🤖 AI Usage Note (Honest Disclosure)
+## 🤖 AI Usage Note & Original Work Disclosure
 
-In alignment with the assignment guidelines:
-- **AI Coding Assistant:** Used Google DeepMind's Antigravity agentic coding assistant to accelerate scaffolding, brainstorm edge-case test vectors, and generate mock travel datasets.
-- **Architectural Design & Review:** All architectural decisions — including the custom resilient JSON repair pipeline, the `AbortController` cancellation pattern, incremental request ID tracking, 3D perspective projection math, and the React state machine — were intentionally architected and reviewed to ensure 100% code comprehension and interview readiness.
+In explicit alignment with Section 8 of the Flam Candidate Reference Guide:
+
+### What AI Tools Were Used
+- **AI Assistant:** Google DeepMind's Antigravity agentic coding assistant.
+- **Boilerplate Scaffolding:** Used to accelerate repetitive scaffolding (initial component shells, Lucide React icon imports, and CSS utility tokens).
+- **Realistic Dataset Generation:** Assisted in generating realistic mock travel itineraries ([`server/mockTrips.js`](file:///c:/Users/adars/Documents/flamassignment/server/mockTrips.js)) for offline evaluation without requiring external API credits.
+- **Edge-Case Simulation Brainstorming:** Used to draft synthetic failure vectors (cut-off malformed JSON strings, missing-field payloads) for the Recruiter Resilience Lab.
+
+### What Was Originally Architected & Implemented
+- **React State Machine & CRUD Architecture:** The entire state management flow in [`src/hooks/useTripPlanner.js`](file:///c:/Users/adars/Documents/flamassignment/src/hooks/useTripPlanner.js) — including drag-and-drop stop reordering, cross-day transfers, stop editing, custom additions, and the immutable undo history stack.
+- **Defensive Multi-Stage Validation Pipeline:** The structural shape verification engine ([`src/lib/validateResult.ts`](file:///c:/Users/adars/Documents/flamassignment/src/lib/validateResult.ts) and [`src/utils/jsonRepair.js`](file:///c:/Users/adars/Documents/flamassignment/src/utils/jsonRepair.js)) that intercepts malformed or wrong-shape model output before it can reach React state.
+- **Race Condition & Stale Overwrite Shield:** The dual-layer protection pattern combining incremental `requestId` refs with `AbortController` cancellation to guarantee slow requests never overwrite faster newer ones.
+- **Apple iOS 18 Glassmorphism Design System:** The custom CSS design tokens ([`src/index.css`](file:///c:/Users/adars/Documents/flamassignment/src/index.css)) featuring dual-transparency tiers (65% containers, 25% chips), 20px blur, 44px tap targets, and responsive light/dark theme variables.
+
+### 🎯 Live Interview Readiness
+Every line of code, architectural decision, and failure recovery strategy has been thoroughly reviewed and understood. I am prepared to:
+1. Walk through the entire codebase and explain the design trade-offs live.
+2. Review and critique any AI-generated snippets presented by the interview panel.
+3. Diagnose and fix any bugs introduced live during the technical interview.
+4. Live-code new interactive features or extend the data schema on the spot.
 
 ---
 
