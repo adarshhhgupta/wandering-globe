@@ -20,7 +20,7 @@
     "trip-planner",
     "stateful-ui"
   ],
-  "author": "",
+  "author": "Adarsh Kumar Gupta <adarshgupta9890@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "canvas-confetti": "^1.9.4",

@@ -285,9 +285,9 @@ export function Footer({ onOpenSimulationModal, onOpenApiKeyModal, onOpenSavedTr
             </ul>
           </div>
 
-          {/* Recruiter Evaluation Matrix */}
+          {/* Engineering Architecture */}
           <div className="footer-links-column">
-            <h4 className="footer-column-heading">Recruiter Lab</h4>
+            <h4 className="footer-column-heading">Engineering Lab</h4>
             <ul className="footer-links-list">
               <li>
                 <button
@@ -296,7 +296,7 @@ export function Footer({ onOpenSimulationModal, onOpenApiKeyModal, onOpenSavedTr
                   className="recruiter-highlight-link"
                 >
                   <ShieldCheck size={13} className="text-ios-purple" />
-                  <span>AI Failure Simulation Lab</span>
+                  <span>Fault Simulation Suite</span>
                 </button>
               </li>
               <li>
@@ -306,24 +306,24 @@ export function Footer({ onOpenSimulationModal, onOpenApiKeyModal, onOpenSavedTr
                   className="recruiter-highlight-link"
                 >
                   <Lock size={13} className="text-ios-blue" />
-                  <span>Backend Proxy Architecture</span>
+                  <span>Backend Proxy Gateway</span>
                 </button>
               </li>
               <li className="footer-matrix-item">
                 <CheckCircle2 size={13} className="text-green" />
-                <span>React Hooks Architecture (25%)</span>
+                <span>React 19 State Machine</span>
               </li>
               <li className="footer-matrix-item">
                 <CheckCircle2 size={13} className="text-green" />
-                <span>AI Data Handling (25%)</span>
+                <span>Groq LPU Inference</span>
               </li>
               <li className="footer-matrix-item">
                 <CheckCircle2 size={13} className="text-green" />
-                <span>Error Resilience (20%)</span>
+                <span>Heuristic JSON Repair</span>
               </li>
               <li className="footer-matrix-item">
                 <CheckCircle2 size={13} className="text-green" />
-                <span>UI/UX Product Sense (15%)</span>
+                <span>Real-Time Multi-Currency FX</span>
               </li>
             </ul>
           </div>
@@ -332,7 +332,16 @@ export function Footer({ onOpenSimulationModal, onOpenApiKeyModal, onOpenSavedTr
         {/* Spec & Specs Bottom Bar */}
         <div className="footer-bottom-bar">
           <p className="copyright-notice">
-            © 2026 Wandering Globe. Built for the Flam Frontend Internship Assignment.
+            © 2026 Wandering Globe. Developed by{' '}
+            <a
+              href="https://www.linkedin.com/in/adarsh-kumar-gupta-500b50224"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'var(--ios-blue, #0071e3)', textDecoration: 'none', fontWeight: 600 }}
+            >
+              Adarsh Kumar Gupta
+            </a>
+            .
           </p>
 
           <div className="specs-tag-cluster">

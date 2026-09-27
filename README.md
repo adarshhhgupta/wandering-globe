@@ -231,9 +231,9 @@ The embedded **Simulation Suite** allows engineers to test runtime recovery and 
 
 ## Author and Maintainer
 
-Developed and maintained by **Adarsh Gupta**:
+Developed and maintained by **Adarsh Kumar Gupta**:
 - **GitHub:** [@adarshhhgupta](https://github.com/adarshhhgupta)
-- **LinkedIn:** [Adarsh Gupta](https://www.linkedin.com/in/adarsh-gupta-22a36b28a/)
+- **LinkedIn:** [Adarsh Kumar Gupta](https://www.linkedin.com/in/adarsh-kumar-gupta-500b50224)
 - **Email:** [adarshgupta9890@gmail.com](mailto:adarshgupta9890@gmail.com)
 - **Video Walkthrough:** [Watch on YouTube](https://youtu.be/UBTp_u8TOp4)
 
