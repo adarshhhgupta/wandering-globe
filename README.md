@@ -1,192 +1,243 @@
-# 🌍 Wandering Globe — 3D Interactive AI Trip Architect
+# 🌍 Wandering Globe — Autonomous AI Travel Architect & Real-Time Itinerary Engine
 
-> **Frontend Internship Assignment Submission — Flam**  
-> An immersive, stateful 3D travel application transforming free-form text input into interactive day-by-day itineraries with live budget analytics, drag-and-drop reordering, and model failure resilience.
+[![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-4.21-000000?logo=express&logoColor=white)](https://expressjs.com/)
+[![Groq Cloud](https://img.shields.io/badge/Groq_LPU-Inference-F55036?logo=groq&logoColor=white)](https://groq.com/)
+[![Vercel](https://img.shields.io/badge/Deployment-Vercel-black?logo=vercel&logoColor=white)](https://vercel.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-🚀 **Live Production Deployment:** [https://wandering-globe.vercel.app](https://wandering-globe.vercel.app)  
-📦 **GitHub Repository:** [https://github.com/adarshhhgupta/wandering-globe](https://github.com/adarshhhgupta/wandering-globe)  
-🎥 **Screen Recording Demo:** [https://youtu.be/UBTp_u8TOp4](https://youtu.be/UBTp_u8TOp4)
-
----
-
-## ⚡ Quick Start (`npm install && npm start`)
-
-The application runs a secure Node/Express backend proxy along with the Vite/React frontend concurrently:
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/adarshhhgupta/wandering-globe.git
-cd wandering-globe
-
-# 2. Install dependencies
-npm install
-
-# 3. Launch both backend & frontend
-npm start
-```
-
-- **Frontend:** [http://localhost:5173/](http://localhost:5173/)  
-- **Backend API Proxy:** [http://localhost:3001/](http://localhost:3001/)  
-- *Zero-Config Demo Mode:* If no API key is configured, the application **automatically runs in Built-in Demo Mock Mode**, allowing instant evaluation without requiring external API credits!
-
-### Adding a Live Groq API Key (Optional)
-To use live LLM inference with Groq (e.g. `openai/gpt-oss-120b` or `llama-3.3-70b-versatile`):
-1. Copy `.env.example` to `.env`:
-   ```bash
-   cp .env.example .env
-   ```
-2. Insert your free Groq API key from [console.groq.com/keys](https://console.groq.com/keys):
-   ```env
-   GROQ_API_KEY=gsk_your_actual_key_here
-   PORT=3001
-   ```
-3. Alternatively, enter your key directly inside the app by clicking the **API Key** pill in the top header.
+> An immersive, stateful web application that transforms free-form, natural language travel prompts into structured, multi-day itineraries with real-time currency recalculation, drag-and-drop stop management, and an enterprise-grade failure resilience pipeline.
 
 ---
 
-## 🎯 Architecture & Rubric Coverage
-
-| Rubric Area | Weight | Implementation Highlights |
-| :--- | :---: | :--- |
-| **React & Frontend Architecture** | **25%** | • Modular custom hooks (`useTripPlanner`, `useLocalStorage`)<br>• Explicit status machine (`idle`, `loading`, `refining`, `success`, `error`)<br>• HTML5 Drag-and-Drop + accessible touch controls for stop reordering<br>• Full stateful CRUD: reorder, transfer between days, edit, delete, add custom stop, and instant undo stack. |
-| **AI Integration & Data Handling** | **25%** | • Secure Express backend proxy preventing browser API key leaks<br>• Groq `response_format: { type: "json_object" }` structured schema enforcement<br>• Multi-stage client & server data normalization<br>• AI Refinement Loop endpoint (`/api/refine-trip`) updating existing itineraries without full regeneration. |
-| **Handling Bad AI Output** | **20%** | • **Client-Side JSON Repair Engine (`jsonRepair.js`)**: strips code fences, repairs unclosed brackets, fixes trailing commas, unescaped characters<br>• **Stale Request / Race Condition Shield**: `AbortController` cancellation + incremental `requestId` checks ensuring older slow responses never overwrite newer ones<br>• **Categorized Error Diagnostics**: friendly explanations, actionable retry with backoff, technical raw payload disclosure<br>• **Interactive AI Resilience Lab**: in-app recruiter test suite for bad output simulation. |
-| **UI/UX & Product Sense** | **15%** | • 3D interactive celestial aesthetic with live canvas particle background<br>• Physical 3D Tilt Cards with specular glare tracking mouse coordinates<br>• 3D Destination Portal Window featuring dynamic coordinates and atmospheric lighting<br>• Custom dual-ring cursor with 0.2 lerping lag and contextual labels<br>• Interactive budget analytics with live recalculation and currency switcher (`$`, `€`, `£`, `₹`, `¥`)<br>• Interactive packing checklist and confetti celebration on save. |
-| **Communication & Understanding** | **15%** | • Clear architectural separation of concerns<br>• Transparent AI usage disclosures<br>• Well-documented codebase ready for live interview technical walk-through. |
+### 🔗 Quick Links
+- 🚀 **Live Production Application:** [https://wandering-globe.vercel.app](https://wandering-globe.vercel.app)
+- 📦 **GitHub Repository:** [https://github.com/adarshhhgupta/wandering-globe](https://github.com/adarshhhgupta/wandering-globe)
+- 🎥 **Video Walkthrough & Architecture Demo:** [https://youtu.be/UBTp_u8TOp4](https://youtu.be/UBTp_u8TOp4)
 
 ---
 
-## 🛡️ AI Failure Handling & Resilience Showcase
+## 📖 Overview
 
-Handling unexpected or corrupted LLM output is the central evaluation criterion of this assignment. Wandering Globe implements a multi-tier defense system:
+Planning international travel is often a fragmented and frustrating experience involving scattered browser tabs, unstructured travel blogs, and complex budget spreadsheets.
+
+**Wandering Globe** solves this by combining high-speed LLM inference with an interactive, stateful web dashboard. Rather than returning passive markdown text, the platform converts natural language prompts into a rich, structured dataset that travelers can reorder, edit, refine, and budget in real time.
 
 ```
-[ Raw LLM Output ]
-         │
-         ▼
-[ Stage 1: Extraction & Codeblock Stripping ]
-   - Strips ```json ... ``` markdown code fences
-   - Locates balanced { ... } bounds
-         │
-         ▼
-[ Stage 2: Heuristic Syntax Repair (`jsonRepair.js`) ]
-   - Removes trailing commas before } or ]
-   - Balances unclosed brackets resulting from token cutoff
-   - Escapes stray newlines within string literals
-         │
-         ▼
-[ Stage 3: Schema Validation & Normalization (`validateSchema.js`) ]
-   - Validates presence of `days` array and required stop attributes
-   - Assigns resilient defaults (unique IDs, categories, fallback durations)
-   - Re-computes live financial totals if omitted by model
-         │
-         ▼
-[ Stage 4: Stale Request & Race Condition Protection ]
-   - Discards responses where `requestId !== activeRequestIdRef.current`
-   - Aborts in-flight fetches on new prompt submission or cancellation
+"Plan a 4-day cultural exploration in Kyoto with traditional tea houses, scenic walks, and a $1,200 budget."
+                                    │
+                                    ▼
+       ┌────────────────────────────────────────────────────────┐
+       │             Wandering Globe Engine                     │
+       │  • Groq LPU Inference (OpenAI GPT-OSS / Qwen / LLaMA)   │
+       │  • Heuristic JSON Repair & Structural Validation       │
+       │  • Multi-Currency Recalculation Engine                 │
+       │  • Stateful Drag-and-Drop Timeline Architect           │
+       └────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+                 [ Interactive Multi-Day Visual Dashboard ]
 ```
 
-### 🧪 Recruiter "AI Resilience Lab" (Interactive Simulation Panel)
-Click the **AI Resilience Lab** pill in the top header to test edge-case handling live in the browser without modifying code:
-- **Simulate Malformed JSON:** Intentionally transmits truncated JSON syntax with unclosed quotes and braces to test client repair heuristics and error recovery.
-- **Simulate Wrong Shape / Missing Schema:** Transmits valid JSON lacking the required `days` array to verify schema validation guards.
-- **Simulate Slow / 10s Timeout:** Artificially delays response by 10,000ms to test active loaders, cancel button responsiveness, and `AbortController`.
-- **Simulate 429 Rate Limit:** Simulates Groq quota limits with backoff guidance.
-- **Simulate 500 LLM Gateway Outage:** Verifies one-click retry and fallback to verified demo data.
-- **Execute Stale Overwrite Demonstration:** Fires Request A (delayed by 3s) and immediately fires Request B to demonstrate that Request A is aborted and discarded, preventing state corruption.
+---
+
+## ⚡ Core Features
+
+- 🧠 **Autonomous Itinerary Generation:** Generates comprehensive day-by-day schedules with categorized stops (attractions, dining, cultural experiences, transport, leisure), optimal time slots, estimated costs, and coordinates.
+- 🔄 **Conversational Refinement Loop:** Refines existing itineraries using contextual follow-up prompts (e.g., *"Make Day 2 more budget-friendly"* or *"Add an evening jazz club in Gion"*) without re-generating from scratch.
+- 🖐️ **Interactive Drag-and-Drop Timeline:** Reorder activities within a day or seamlessly migrate stops across different days using HTML5 Drag-and-Drop and accessible touch-friendly controls.
+- 💱 **Live Multi-Currency Financial Engine:** Real-time budget conversion across 5 global currencies (`USD $`, `EUR €`, `GBP £`, `INR ₹`, `JPY ¥`) with instant recalculation of daily and total expenses based on live FX exchange rates.
+- 🛡️ **Defensive Failure-Tolerant Pipeline:** Client-side heuristic JSON repair, strict runtime schema validation, and stale-response cancellation guarantee zero app crashes from malformed LLM responses.
+- 🧪 **System Reliability & Simulation Lab:** An in-app diagnostic suite to stress-test system behavior against truncated JSON, schema corruption, simulated 10s latency timeouts, 429 rate limits, and 500 server outages.
+- 💾 **Local Persistence & Export:** Automatically syncs changes to `localStorage`, provides one-click JSON itinerary export, and features an immutable undo/redo history stack.
+- 🎨 **Apple iOS 18 Glassmorphism Design:** Dual-transparency glass surfaces (65% containers, 25% chips), 20px blur filtration, responsive Dynamic Island header, and a 60 FPS HTML5 radar canvas background.
+
+---
+
+## 🏗️ Technical Architecture & Design Patterns
+
+Wandering Globe is built with an emphasis on security, clean separation of concerns, and resilient data processing.
+
+```
+                      [ Client: React 19 Frontend ]
+                      │                         ▲
+   1. User Prompt     │                         │ 6. Validated State
+   (Natural Language) │                         │    (Interactive UI)
+                      ▼                         │
+            ┌───────────────────┐    ┌───────────────────────────┐
+            │ Central API Layer │    │ Defensive Client Pipeline │
+            │   (src/lib/api)   │    │  • jsonRepair.js          │
+            └─────────┬─────────┘    │  • validateResult.js      │
+                      │              └─────────────▲─────────────┘
+                      │ 2. HTTP POST               │
+                      ▼                            │ 5. Normalized JSON
+            ┌───────────────────┐                  │
+            │ Express Proxy API │──────────────────┘
+            │  (server/index)   │
+            └─────────┬─────────┘
+                      │ 3. API Key Isolation (Zero Browser Leak)
+                      ▼
+            ┌───────────────────┐
+            │ Groq Cloud Engine │  4. High-Speed LPU Inference
+            │ (Groq SDK / LPU)  │ ──► Structured JSON Object
+            └───────────────────┘
+```
+
+### 1. API Key Isolation Pattern
+Private LLM credentials are strictly contained within the Node.js / Express proxy layer (`server/index.js` and Vercel serverless handler `api/index.js`). The client application communicates strictly with backend gateway endpoints (`/api/generate-trip`, `/api/refine-trip`), ensuring zero exposure of private API secrets in browser network tabs.
+
+### 2. Defensive Multi-Stage Data Pipeline
+Large Language Models can occasionally output corrupted syntax, extra markdown backticks, or truncated payloads. Wandering Globe implements a multi-tier defense:
+1. **Extraction & Codeblock Sanitization:** Strips markdown fences (````json ... ````) and isolates JSON boundaries.
+2. **Heuristic Syntax Repair (`src/utils/jsonRepair.js`):** Automatically closes unclosed arrays/objects, removes trailing commas before closing braces, and fixes escaped quote anomalies caused by token cutoffs.
+3. **Runtime Schema Normalization (`src/lib/validateResult.js`):** Enforces strict typing against the itinerary schema, generates missing UUIDs, assigns default categories, and programmatically computes expense totals if omitted by the model.
+
+### 3. Concurrency Shield & Race Condition Prevention
+To prevent slow network responses from overwriting newer user requests (stale overwrite hazard), the application pairs browser `AbortController` cancellation signals with sequential, monotonically increasing `requestId` references in `src/hooks/useTripPlanner.js`. Any incoming payload whose request ID does not match the active request is immediately discarded.
+
+### 4. Dynamic Currency Conversion Engine
+The application avoids static hardcoded currency signs. All monetary figures are normalized to base USD and dynamically recomputed using a centralized FX rate matrix (`1 USD = 86.50 INR`, `0.92 EUR`, `0.79 GBP`, `154.00 JPY`), updating every stop badge, day subtotal, and total budget widget instantaneously.
+
+---
+
+## 💻 Tech Stack & Technical Terms
+
+| Domain | Technologies & Libraries | Key Technical Terms & Patterns |
+| :--- | :--- | :--- |
+| **Frontend Core** | React 19, Vite 6, JavaScript (ES2023) | Finite State Machine, Custom Hooks (`useTripPlanner`, `useLocalStorage`), Functional Programming |
+| **Styling & UI** | Vanilla CSS, Lucide React, Canvas Confetti | iOS 18 Glassmorphism, HSL Design Tokens, 20px Backdrop Blur, 44px Minimum Tap Targets, 60 FPS HTML5 Canvas |
+| **Backend & Proxy** | Node.js 18+, Express 4.21, Cors, Dotenv | API Gateway Pattern, Reverse Proxy, Key Isolation, Vercel Serverless Functions (`api/index.js`) |
+| **AI Inference** | Groq Cloud SDK (`groq-sdk`) | Low-Latency Processing Unit (LPU), Structured JSON Mode (`json_object`), Dynamic Prompt Engineering |
+| **Supported Models** | `openai/gpt-oss-120b`, `llama-3.3-70b-versatile`, `qwen/qwen3.8-27b` | Automatic Model Failover, Adaptive Retry with Exponential Backoff |
+| **Data Integrity** | Custom AST & Heuristic Parsers | Syntactic JSON Repair, Structural Schema Validation, UUID Tokenization, Deep State Immutability |
+| **State Management** | React State + `localStorage` | Unidirectional Data Flow, Immutable Undo Stack, Monotonic Request Sequencing |
 
 ---
 
 ## 📂 Project Structure
 
 ```
-flamassignment/
+wandering-globe/
+├── api/
+│   └── index.js             # Vercel Serverless API entrypoint
 ├── server/
-│   ├── generate.js          # Direct Flam Guide spec: holds API key, calls LLM, returns JSON
-│   ├── index.js             # Express API proxy (secure key isolation, simulation routing)
-│   ├── groqService.js       # Groq API client with strict structured JSON schemas
-│   ├── validateSchema.js    # Data extraction, normalization, and validation rules
-│   └── mockTrips.js         # Curated realistic trip datasets for zero-config evaluation
+│   ├── generate.js          # Direct LLM invocation with strict schema constraints
+│   ├── index.js             # Express API gateway (secure key isolation & simulation endpoints)
+│   ├── groqService.js       # Groq Cloud SDK client & model failover handling
+│   ├── validateSchema.js    # Server-side payload sanitization & normalization
+│   └── mockTrips.js         # Curated realistic trip datasets for zero-config offline use
 ├── src/
 │   ├── components/
-│   │   ├── PromptInput.jsx         # Section 5: Free-form text input ("only way user gets info into app")
-│   │   ├── ResultView.jsx          # Section 5: Routes parsed/validated data to interactive UI
-│   │   ├── ErrorState.jsx          # Section 5: Shared error / retry UI with diagnostics
-│   │   ├── LoadingState.jsx        # Section 5: Dedicated loading telemetry with AbortController cancel
-│   │   ├── Header.jsx              # Navigation, theme toggle, resilience lab & API modal triggers
-│   │   ├── HeroRadarCanvas.jsx     # High-performance 60 FPS celestial flight radar canvas
-│   │   ├── DestinationPortal.jsx   # 3D celestial portal window with planetary coordinates
-│   │   ├── TripInput.jsx           # Free-form textarea, duration/vibe pills, sample chips
-│   │   ├── TripView.jsx            # Main dashboard, action toolbar, grid layout
-│   │   ├── DaySection.jsx          # Day accordion, drop target, add-stop modal
-│   │   ├── StopCard.jsx            # Draggable stop card with mobile arrows, edit, expand
-│   │   ├── BudgetSummary.jsx       # Real-time financial breakdown & currency switcher
-│   │   ├── RefinementBar.jsx       # Follow-up refinement prompt loop with preset chips
-│   │   ├── ErrorBanner.jsx         # Categorized error alerts with diagnostics drawer
-│   │   ├── SimulationModal.jsx     # Recruiter resilience test control panel
-│   │   ├── SavedTripsDrawer.jsx    # LocalStorage trip history, JSON export, deletion
-│   │   ├── ApiKeyModal.jsx         # Client-side API key configuration modal
-│   │   └── Footer.jsx              # World clocks, system specs, circular progress scroll-to-top
+│   │   ├── ApiKeyModal.jsx         # In-browser client API key configurator
+│   │   ├── BudgetSummary.jsx       # Real-time multi-currency breakdown & FX switcher
+│   │   ├── DaySection.jsx          # Day accordion container, drop target & stop creator
+│   │   ├── DestinationPortal.jsx   # 3D interactive portal with coordinate tracking
+│   │   ├── ErrorBanner.jsx         # Actionable error alert with diagnostic disclosures
+│   │   ├── ErrorState.jsx          # Dedicated full-page failure recovery view
+│   │   ├── Footer.jsx              # World time clocks, system telemetry & back-to-top
+│   │   ├── Header.jsx              # Navigation bar, Dynamic Island pill & theme toggle
+│   │   ├── HeroRadarCanvas.jsx     # High-performance 60 FPS celestial flight radar
+│   │   ├── LoadingState.jsx        # Telemetry loading state with AbortController trigger
+│   │   ├── PromptInput.jsx         # Free-form natural language query interface
+│   │   ├── RefinementBar.jsx       # Follow-up conversational prompt input bar
+│   │   ├── ResultView.jsx          # Main itinerary presentation coordinator
+│   │   ├── SavedTripsDrawer.jsx    # Persistent itinerary storage & JSON export drawer
+│   │   ├── SimulationModal.jsx     # Reliability & resilience edge-case testing lab
+│   │   ├── StopCard.jsx            # Draggable activity card with edit & delete controls
+│   │   ├── TripInput.jsx           # Prompt input with vibe chips & duration selectors
+│   │   └── TripView.jsx            # Action toolbar, print triggers & grid coordinator
 │   ├── hooks/
-│   │   ├── useTripPlanner.js       # Core state machine, AbortController, stale check, CRUD
-│   │   └── useLocalStorage.js      # Synced persistent storage for trips and theme
+│   │   ├── useTripPlanner.js       # Core state machine, AbortController & CRUD operations
+│   │   └── useLocalStorage.js      # Synced persistent storage for trips and theme preferences
 │   ├── lib/
-│   │   ├── api.js                  # Section 5: Centralized network layer (proxy caller, never LLM direct)
-│   │   └── validateResult.js       # Section 5: Defensive shape validation & normalization before render
+│   │   ├── api.js                  # Centralized client network gateway
+│   │   └── validateResult.js       # Defensive shape validation & normalization engine
 │   ├── types/
-│   │   └── result.js               # Section 5: The structured shape designed in Step 1
+│   │   └── result.js               # Structured itinerary schema definitions
 │   ├── utils/
-│   │   ├── jsonRepair.js           # Multi-heuristic client-side JSON parser & sanitizer
-│   │   └── mockData.js             # Preset inspiration prompts, category themes, currencies
-│   ├── index.css                   # iOS 18 Dual-Transparency Glassmorphism (20px blur, 44px tap targets)
-│   ├── App.jsx                     # Top-level coordinator with radiant ambient orbs
-│   └── main.jsx                    # React 19 entry point
-├── index.html                      # HTML5 template with Google Fonts (Inter / Outfit)
-├── vite.config.js                  # Vite configuration with backend proxy
-├── package.json                    # Scripts and dependencies (npm start runs client & server)
-└── README.md                       # Comprehensive documentation
+│   │   ├── jsonRepair.js           # Multi-heuristic client-side JSON parser & repair tool
+│   │   └── mockData.js             # Inspiration prompts, category palettes, and FX exchange rates
+│   ├── App.jsx                     # Top-level application coordinator
+│   ├── index.css                   # Custom CSS tokens & iOS 18 glassmorphism styles
+│   └── main.jsx                    # React 19 application mounting point
+├── package.json                    # Scripts and dependencies (`npm start` launches client & proxy)
+├── vercel.json                     # Serverless deployment configuration with proxy routing
+└── README.md                       # Complete technical documentation
 ```
 
 ---
 
-## 🤖 AI Usage Note & Original Work Disclosure
+## 🚀 Getting Started
 
-In explicit alignment with Section 8 of the Flam Candidate Reference Guide:
+### Prerequisites
+- **Node.js** (v18.0.0 or higher recommended)
+- **npm** (v9.0.0 or higher)
 
-### What AI Tools Were Used
-- **AI Assistant:** Google DeepMind's Antigravity agentic coding assistant.
-- **Boilerplate Scaffolding:** Used to accelerate repetitive scaffolding (initial component shells, Lucide React icon imports, and CSS utility tokens).
-- **Realistic Dataset Generation:** Assisted in generating realistic mock travel itineraries ([`server/mockTrips.js`](file:///c:/Users/adars/Documents/flamassignment/server/mockTrips.js)) for offline evaluation without requiring external API credits.
-- **Edge-Case Simulation Brainstorming:** Used to draft synthetic failure vectors (cut-off malformed JSON strings, missing-field payloads) for the Recruiter Resilience Lab.
+### Installation & Local Run
 
-### What Was Originally Architected & Implemented
-- **React State Machine & CRUD Architecture:** The entire state management flow in [`src/hooks/useTripPlanner.js`](file:///c:/Users/adars/Documents/flamassignment/src/hooks/useTripPlanner.js) — including drag-and-drop stop reordering, cross-day transfers, stop editing, custom additions, and the immutable undo history stack.
-- **Defensive Multi-Stage Validation Pipeline:** The structural shape verification engine ([`src/lib/validateResult.ts`](file:///c:/Users/adars/Documents/flamassignment/src/lib/validateResult.ts) and [`src/utils/jsonRepair.js`](file:///c:/Users/adars/Documents/flamassignment/src/utils/jsonRepair.js)) that intercepts malformed or wrong-shape model output before it can reach React state.
-- **Race Condition & Stale Overwrite Shield:** The dual-layer protection pattern combining incremental `requestId` refs with `AbortController` cancellation to guarantee slow requests never overwrite faster newer ones.
-- **Apple iOS 18 Glassmorphism Design System:** The custom CSS design tokens ([`src/index.css`](file:///c:/Users/adars/Documents/flamassignment/src/index.css)) featuring dual-transparency tiers (65% containers, 25% chips), 20px blur, 44px tap targets, and responsive light/dark theme variables.
+```bash
+# 1. Clone the repository
+git clone https://github.com/adarshhhgupta/wandering-globe.git
+cd wandering-globe
 
-### 🎯 Live Interview Readiness
-Every line of code, architectural decision, and failure recovery strategy has been thoroughly reviewed and understood. I am prepared to:
-1. Walk through the entire codebase and explain the design trade-offs live.
-2. Review and critique any AI-generated snippets presented by the interview panel.
-3. Diagnose and fix any bugs introduced live during the technical interview.
-4. Live-code new interactive features or extend the data schema on the spot.
+# 2. Install all dependencies
+npm install
 
----
+# 3. Start both the Express proxy and Vite frontend concurrently
+npm start
+```
 
-## ⏱️ Time Spent
+After starting:
+- **Frontend Dashboard:** [http://localhost:5173/](http://localhost:5173/)
+- **Backend Proxy Gateway:** [http://localhost:3001/](http://localhost:3001/)
 
-- **Total Time:** ~6.5 hours (well within the recommended 8-hour limit)
-  - *Planning & Schema Engineering:* 1 hour
-  - *Backend Proxy & Error Simulation Layer:* 1.5 hours
-  - *React State Machine, Drag-and-Drop & CRUD:* 1.5 hours
-  - *3D Interactive UI & Aesthetics (Cosmic Canvas, Tilt Cards, Cursor):* 1.5 hours
-  - *Edge-Case Testing, Browser Verification & Documentation:* 1 hour
+> 💡 **Zero-Config Built-in Demo Mode:**  
+> If no API key is configured, Wandering Globe automatically activates **Built-in Demo Mode**, utilizing verified high-fidelity mock datasets ([`server/mockTrips.js`](file:///c:/Users/adars/Documents/flamassignment/server/mockTrips.js)). You can immediately evaluate every feature, drag-and-drop interaction, and currency conversion without signing up for external API credits.
 
 ---
 
-## 🔮 Known Limitations & Future Enhancements
+## 🔑 Environment Configuration (Optional)
 
-1. **Map Visualization:** While each stop features coordinates and neighborhood metadata, an interactive Mapbox or Leaflet map route layer would be a natural next step.
-2. **Offline PWA Support:** Adding a Service Worker for offline itinerary caching during active flight travel.
-3. **Multi-User Collaboration:** WebRTC or WebSocket sync allowing multiple travelers to collaborate on the same itinerary in real time.
+To connect live inference with the **Groq Cloud API**:
+
+1. Create a `.env` file in the project root:
+   ```bash
+   cp .env.example .env
+   ```
+2. Add your Groq API key (available for free at [console.groq.com/keys](https://console.groq.com/keys)):
+   ```env
+   GROQ_API_KEY=gsk_your_groq_api_key_here
+   PORT=3001
+   ```
+3. *Alternative:* You can also click the **API Key** button in the top navigation bar of the running application to securely supply an API key for your local session without touching environment files.
+
+---
+
+## 🧪 Edge-Case Testing & System Reliability Lab
+
+To verify how the application behaves when encountering upstream LLM anomalies, open the **Reliability Lab** by clicking the **Simulation** pill in the top header:
+
+- **Malformed / Truncated JSON:** Transmits broken JSON syntax with unclosed braces to test the client-side heuristic repair engine (`jsonRepair.js`) and error boundary recovery.
+- **Wrong Shape / Missing Schema:** Transmits valid JSON missing critical fields (such as the `days` array) to verify defensive schema validation guards.
+- **Artificial 10s Timeout:** Injects a 10,000ms latency delay to test user loading telemetry, cancellation responsiveness, and `AbortController` termination.
+- **429 Rate Limit Simulation:** Triggers HTTP 429 quota exceptions to verify exponential backoff messaging and user guidance.
+- **500 Server Outage:** Simulates an unexpected proxy crash to verify graceful degradation and single-click fallback to cached demo data.
+- **Stale Overwrite Demonstration:** Dispatches Request A (delayed by 3 seconds) followed immediately by Request B, proving that Request A is aborted and discarded before it can corrupt current application state.
+
+---
+
+## 👨‍💻 Author & Acknowledgements
+
+Created and engineered by **Adarsh Gupta**:
+- 🌐 **GitHub:** [@adarshhhgupta](https://github.com/adarshhhgupta)
+- 💼 **LinkedIn:** [Adarsh Gupta](https://www.linkedin.com/in/adarsh-gupta-22a36b28a/)
+- 📧 **Email:** [adarshgupta9890@gmail.com](mailto:adarshgupta9890@gmail.com)
+- 🎥 **Project Video Demo:** [Watch on YouTube](https://youtu.be/UBTp_u8TOp4)
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** — feel free to explore, fork, and adapt it for your own applications.
